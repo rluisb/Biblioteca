@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<ui:composition template="/WEB-INF/modelos/padrao.xhtml">
+		<ui:define name="conteudo">
+			
+			<p:layout>
+				<p:layoutUnit position="north" style="text-align: center;">
+					<p:outputLabel style="font-size: 30px;" value="Manutenção de funcionarios"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+
+					<h:form id="funcionarioForm">				
+						<p:growl id="growl" showDetail="true" sticky="false" life="4000" />  
+						
+						<p:panelGrid columns="3">
+						
+							<p:outputLabel for="nome" value="Nome:"/>
+							<p:inputText id="nome" requiredMessage="Campo obrigatório" required="true" 
+								value="#{funcionarioManagedBean.funcionario.nome}" />
+							<p:message for="nome" />
+		
+							<p:outputLabel for="cargo" value="Cargo:"/>
+							<p:inputText id="cargo" requiredMessage="Campo obrigatório" required="true" 
+								value="#{funcionarioManagedBean.funcionario.cargo}" />
+							<p:message for="cargo" />
+						
+						</p:panelGrid>
+					
+						<p:commandButton value="Salvar" process="@form" update="@form tabelaDeFuncionarios" action="#{funcionarioManagedBean.salvar()}" icon="fa fa-fw fa-save" />
+						<p:commandButton value="Limpar" process="@this" update="@form" action="#{funcionarioManagedBean.limpar()}" icon="fa fa-fw fa-eraser" />
+					</h:form>
+					
+					<p:dataTable id="tabelaDeFuncionarios" var="funcionario" value="#{funcionarioManagedBean.listaDeFuncionariosCadastradas}"
+						emptyMessage="Não existem funcionarios cadastrados" style="padding-top:20px;">
+						<p:column headerText="Id">
+				    	    <h:outputText value="#{funcionario.id}" />
+					    </p:column>
+					    <p:column headerText="Nome">
+				    	    <h:outputText value="#{funcionario.nome}" />
+					    </p:column>
+					    <p:column headerText="CPF">
+				    	    <h:outputText value="#{funcionario.cargo}" />
+					    </p:column>
+					    <p:column headerText="Ações" style="text-align: center">
+					    	<p:commandButton icon="fa fa-fw fa-edit" title="Editar Funcionario" update="funcionarioForm" action="#{funcionarioManagedBean.setFuncionario(funcionario)}" />
+					    	<p:commandButton icon="fa fa-fw fa-trash" title="Deletar Funcionario" update="tabelaDeFuncionarios funcionarioForm" action="#{funcionarioManagedBean.deletar(funcionario)}">
+					    		<p:confirm header="Confirmação" message="Deseja deletar o Funcionario?" icon="ui-icon-alert" />
+					    	</p:commandButton>
+					    	
+					    	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						    </p:confirmDialog>
+					    </p:column>
+					</p:dataTable>
+				
+				</p:layoutUnit>
+			
+			</p:layout>
+
+		</ui:define>
+	</ui:composition>
+	
+</html>
